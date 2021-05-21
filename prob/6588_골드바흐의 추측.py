@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
-# +
-#시간초과
+# 시간초과 요인 https://www.acmicpc.net/board/view/44906
+# 위 글 3번 반영
+
 import sys
 
 t = 0
@@ -20,16 +20,9 @@ for i in range(2, len(numArr)//2):
             numArr[j] = 0
 
 for n in testcase:
-    flag = True
-    for i in range(2, n-1):
-        for j in range(n-2, 1, -1):
-            if numArr[i]*numArr[j]:
-                if n == (i+j):
-                    print('{} = {} + {}'.format(n, i, j))
-                    flag = False
-                    break
-        if not flag:
+    for i in range(n-2, 1, -1):
+        if numArr[i]*numArr[n-i]:
+            print('{} = {} + {}'.format(n, n-i, i))
             break
-    if flag:
+    else:
         print("Goldbach's conjecture is wrong.")
-
