@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # +
 n, m = map(int, input().split())
 #visited = [0] * (n+1)
@@ -18,5 +16,4 @@ backtracking(0, 1)
 
 
 
->>>>>>> ef69a782e02ed2f80bd0a4b10e26bd3fcdf05f9d
 
