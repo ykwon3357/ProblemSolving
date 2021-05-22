@@ -1,7 +1,7 @@
 import math
 
-# ºÙÀÌ°í ¶ç¿ì°í
-# n = 3x2^k ÀÏ¶§ 3x2^(k-1) ¸¸Å­ shift
+# ë¶™ì´ê³  ë„ìš°ê³ 
+# n = 3x2^k ì¼ë•Œ 3x2^(k-1) ë§Œí¼ shift
 star = ['  *  ', ' * * ','*****']
 def makeStar(shift):
     for i in range(len(star)):
