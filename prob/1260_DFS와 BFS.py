@@ -2,7 +2,7 @@ import sys
 
 n, m, v = map(int, sys.stdin.readline().rstrip().split())
 
-#ÀÎÁ¢ Çà·Ä
+#ì¸ì ‘ í–‰ë ¬
 matrix = [[0]*(n+1) for _ in range(n+1)]
 visited = [0]*(n+1)
 for _ in range(m):
