@@ -1,4 +1,4 @@
-def gcd(a, b): # À¯Å¬¸®µå È£Á¦¹ı
+def gcd(a, b): # ìœ í´ë¦¬ë“œ í˜¸ì œë²•
     if b == 0:
         return a
     return gcd(b, a%b)
