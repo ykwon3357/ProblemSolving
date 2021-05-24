@@ -1,4 +1,4 @@
-# 8Ка
+# 8m
 n, m = map(int, input().split())
 numList = sorted(list(map(int, input().split())))
 visited = [0] * n
