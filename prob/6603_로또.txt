@@ -1,0 +1,30 @@
+# 26m
+# 백트래킹으로 조합구하기
+
+testcase = []
+while True:
+    t = list(map(int, input().split()))
+    if t[0] == 0:
+        break
+    testcase.append(t[1:])
+
+def backtracking(k, idx, arr, case, visited):
+    if k == 6:
+        print(*arr)
+        return
+    
+    for i in range(idx, len(case)):
+        if not visited[i]:
+            arr[k] = case[i]
+            visited[i] = 1
+            backtracking(k+1, i, arr, case, visited)
+            visited[i] = 0
+
+flag = False
+for case in testcase:
+    visited = [0] * len(case)
+    arr = [0] * 6   
+    if flag :
+        print()
+    flag = True
+    backtracking(0, 0, arr, case, visited)

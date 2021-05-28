@@ -1,0 +1,23 @@
+# 1h 10m
+# set으로 중복 제거
+# 다른방법 생각해보기
+n, m = map(int, input().split())
+nArr = sorted(list(map(int, input().split())))
+visited = [0]*n
+arr = [0]*m
+ans = set()
+def backtracking(k):
+    if k == m:
+        ans.add(tuple(arr))
+        return
+
+    for i in range(n):
+        if not visited[i]:
+            arr[k] = nArr[i]
+            visited[i] = 1
+            backtracking(k+1)
+            visited[i] = 0
+backtracking(0)
+for a in sorted(ans):
+    print(*a)
+

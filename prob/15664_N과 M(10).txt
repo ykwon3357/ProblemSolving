@@ -1,0 +1,23 @@
+# 12m
+
+n, m  = map(int, input().split())
+nArr = sorted(list(map(int, input().split())))
+
+arr = [0] * m
+visited = [0] * n
+res = set()
+def backtracking(k, idx):
+    if k == m:
+        res.add(tuple(arr))
+        return
+    
+    for i in range(idx, n):
+        if not visited[i]:
+            arr[k] = nArr[i]
+            visited[i] = 1
+            backtracking(k+1, i+1)
+            visited[i] = 0
+backtracking(0, 0)
+
+for r in sorted(res):
+    print(*r)

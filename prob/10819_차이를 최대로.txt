@@ -1,0 +1,28 @@
+# 30m
+n = int(input())
+nArr = list(map(int, input().split()))
+
+def calSum(arr):
+    res = 0
+    for i in range(len(arr)-1):
+        res += abs(arr[i] - arr[i+1])
+    return res
+
+maxSum = 0
+visited = [0] * len(nArr)
+arr = [0] * len(nArr)
+def backtracking(k):
+    global maxSum
+    if k == len(nArr):
+        maxSum = max(maxSum, calSum(arr))
+        return
+    
+    for i in range(len(nArr)):
+        if not visited[i]:
+            arr[k] = nArr[i]
+            visited[i] = 1
+            backtracking(k+1)
+            visited[i] = 0
+backtracking(0)
+
+print(maxSum)
