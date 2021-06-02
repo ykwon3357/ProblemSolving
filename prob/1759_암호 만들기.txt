@@ -1,0 +1,33 @@
+# 30m
+
+l, c = map(int, input().split())
+string = list(input().split())
+
+# 사전순으로 정렬
+for i in range(len(string)-1):
+    for j in range(i, len(string)):
+        if string[i] > string[j]:
+            string[i], string[j] = string[j], string[i]
+
+visited = [0] * c
+s = []
+def solve(idx):
+    if len(s) == l:
+        m, j = 0, 0
+        for alpha in s: # 완성된 문자열 탐색
+            if alpha in ['a', 'e', 'i', 'o', 'u']: # 모음이면
+                m += 1 # 모음 증가
+            else: # 아니면
+                j += 1 # 자음 증가
+        if m >= 1 and j >= 2: # 모음이 1개이상, 자음이 2개이상일때만 출력
+            print(''.join(s))
+        return
+    
+    for i in range(idx, c):
+        if not visited[i]:
+            s.append(string[i])
+            visited[i] = 1
+            solve(i+1)
+            visited[i] = 0
+            s.pop()
+solve(0)
