@@ -1,0 +1,26 @@
+# 80m
+t = int(input())
+
+def getGcd(a, b):
+    while b != 0:
+        t = b
+        b = a%b
+        a = t
+    return a
+
+for _ in range(t):
+    m, n, x, y = map(int, input().split())
+    x, y = x-1, y-1 # 10 다음엔 0이 아니라 1이기 때문에 x-1,y-1
+    lcm = m*n//getGcd(m,n)
+    ans = 0
+    if m == x and n == y:
+        ans = lcm
+    else:
+        for nx in range(x, lcm+1, m): # m,n 최소공배수(마지막년도)까지 반복, 이때 x가 될수 있는 경우만 반복하는게 핵심
+            if nx % n == y: 
+                ans = nx + 1 # 1 x-1해줬기에 +1 해줘야함
+                break
+        else: # 위에 해당 안되면 -1출력
+            ans = -1
+    print(ans)
+

@@ -1,0 +1,23 @@
+# 30m
+'''
+1,1 에서 0,0 0,1 1,0 중에 max 값을 더해줌
+'''
+n, m = map(int, input().split())
+maze = [list(map(int, input().split())) for _ in range(n)]
+
+dx = [-1,0,-1]
+dy = [0,-1,-1]
+
+for x in range(len(maze)):
+    for y in range(len(maze[0])):
+        if x == 0 and y == 0:
+            continue
+        maxVal = 0
+        for i in range(3):
+            bx = x + dx[i]
+            by = y + dy[i]
+            if 0 <= bx < n and 0 <= by < m:
+                maxVal = max(maxVal, maze[bx][by])
+        maze[x][y] += maxVal
+
+print(maze[n-1][m-1])        

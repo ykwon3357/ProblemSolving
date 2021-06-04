@@ -1,0 +1,30 @@
+# 80m
+# L,R 을 문자열연산으로 했더니 시간초과떠서 정수연산으로 바꿔줌
+# 그래도 시간초과 떠서 pypy로 제출
+from collections import deque
+
+testcase = [list(map(int, input().split())) for _ in range(int(input()))]
+ans = []
+
+for a, b in testcase:
+    queue = deque()
+    queue.append((a, ''))
+    visited = [0]*10000
+    while queue:
+        n, op = queue.popleft()
+        if n == b:
+            ans.append(op)
+            break
+
+        D = n*2 % 10000
+        S = (n-1) if n != 0 else 9999
+        L = n%1000*10 + n//1000
+        R = n%10*1000 + n//10
+
+        for val, cmd in [(D,'D'),(S,'S'),(L,'L'),(R,'R')]:
+            if not visited[val]:
+                visited[val] = 1
+                queue.append((val, op+cmd))
+
+for a in ans:
+    print(a)
