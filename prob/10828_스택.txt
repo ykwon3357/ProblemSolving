@@ -1,0 +1,18 @@
+#10m
+import sys
+
+n = int(sys.stdin.readline().rstrip())
+
+stack = []
+for _ in range(n):
+    cmd = sys.stdin.readline().rstrip().split()
+    if cmd[0] == 'push':
+        stack.append(cmd[1])
+    if cmd[0] == 'pop':
+        print(stack.pop() if stack else -1)
+    if cmd[0] == 'size':
+        print(len(stack))
+    if cmd[0] == 'empty':
+        print(0 if stack else 1)
+    if cmd[0] == 'top':
+        print(stack[len(stack)-1] if stack else -1) 

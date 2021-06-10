@@ -1,0 +1,16 @@
+# 15m
+# 반례 1,2 => nArr 0,1번째를 0으로 변경
+
+n, m = map(int, input().split())
+
+nArr = [1 for _ in range(m+1)]
+
+for i in range(2, (m+1)//2):
+    if nArr[i]:
+        for j in range(i+i, m+1, i):
+            nArr[j] = 0
+nArr[:2] = [0, 0]
+
+for i in range(n, m+1):
+    if nArr[i]:
+        print(i)

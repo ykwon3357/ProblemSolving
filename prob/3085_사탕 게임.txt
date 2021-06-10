@@ -1,0 +1,47 @@
+# 40m
+# 가로 세로 바꾸고 각각 연속된 문자있는지
+n = int(input())
+color = [list(input()) for _ in range(n)]
+res = 0
+
+def row(): # 가로 최대 개수
+    global res
+    for i in range(n):
+        cnt = 1
+        for j in range(1, n):
+            if color[i][j] == color[i][j-1]:
+                cnt += 1
+            else:
+                if res < cnt:
+                    res = cnt
+                cnt = 1
+        if res < cnt: # 한 줄 모두 같은 경우
+            res = cnt
+
+def col(): # 세로 최대 개수
+    global res
+    for i in range(n):
+        cnt = 1
+        for j in range(1, n):
+            if color[j][i] == color[j-1][i]:
+                cnt += 1
+            else:
+                if res < cnt:
+                    res = cnt
+                cnt = 1
+        if res < cnt:
+            res = cnt
+
+for i in range(n):
+    for j in range(1,n):
+        color[i][j], color[i][j-1] = color[i][j-1], color[i][j] # 가로 바꾸기
+        row()
+        col()
+        color[i][j], color[i][j-1] = color[i][j-1], color[i][j] # 원위치
+        color[j][i], color[j-1][i]= color[j-1][i], color[j][i] # 세로 바꾸기
+        row()
+        col()
+        color[j][i], color[j-1][i]= color[j-1][i], color[j][i] # 원위치
+print(res)
+        
+

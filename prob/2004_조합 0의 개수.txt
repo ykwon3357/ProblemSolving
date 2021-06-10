@@ -1,0 +1,15 @@
+'''
+30 m
+nCm = n! // m! * (n-m)!
+2, 5의 개수 중 작은 거
+'''
+# n!에서 k의 개수
+def cnt(n, k):
+    res = 0
+    while n:
+        n //= k
+        res += n
+    return res
+
+n, m = map(int, input().split())
+print(min(cnt(n, 2) - cnt(m, 2) - cnt(n-m, 2), cnt(n, 5) - cnt(m, 5) - cnt(n-m, 5)))

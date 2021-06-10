@@ -1,0 +1,21 @@
+# 25m
+# 수빈이 위치와 동생 위치 차이들의 최대공약수
+def gcd(a, b):
+    while b:
+        t=b
+        b=a%b
+        a=t
+    return a
+
+n, s = map(int, input().split())
+a = map(int, input().split())
+subA = []
+
+for i in a:
+    subA.append(abs(i-s))
+
+gcdA = subA[0]
+for i in range(1, len(subA)):
+    gcdA = gcd(gcdA, subA[i])
+
+print(gcdA)

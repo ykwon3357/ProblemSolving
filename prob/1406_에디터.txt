@@ -1,0 +1,18 @@
+# 30m
+import sys
+
+curStr = list(sys.stdin.readline().rstrip())
+m = int(sys.stdin.readline().rstrip())
+stack = []
+for _ in range(m):
+    cmd = sys.stdin.readline().rstrip().split()
+
+    if cmd[0] == 'L' and curStr:
+        stack.append(curStr.pop())
+    if cmd[0] == 'D' and stack:
+        curStr.append(stack.pop())
+    if cmd[0] == 'B' and curStr:
+        curStr.pop()
+    if cmd[0] == 'P':
+        curStr.append(cmd[1])
+print(''.join(curStr + stack[::-1]))
