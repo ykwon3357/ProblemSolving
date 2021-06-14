@@ -1,0 +1,20 @@
+'''
+50m
+(는 스택에 저장
+)나왔을때 before가
+(인경우: 스택에서 ( pop 한 후 스택 수 만큼 +
+)인경우: 스택에서 ( pop 한 후 +1
+'''
+string = input()
+stack = []
+ans = 0
+for i in range(len(string)):
+    if string[i] == '(':
+        stack.append('(')
+    else:
+        stack.pop()
+        if string[i-1] == '(':
+            ans += len(stack)
+        else:
+            ans += 1
+print(ans)
