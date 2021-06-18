@@ -1,0 +1,22 @@
+# 35m
+
+string = input()
+res = ''
+for s in string:
+    for ch in s:
+        if ch.isupper():
+            if (ord(ch)+13) > 90:
+                res += chr((ord(ch)+13) - 26)
+            else:
+                res += chr((ord(ch)+13))
+        elif ch.islower():
+            if (ord(ch)+13) > 122:
+                res += chr((ord(ch)+13) - 26)
+            else:
+                res += chr((ord(ch)+13))
+        elif ch == ' ':
+            res += ' '
+        else:
+            res += ch
+    
+print(res)

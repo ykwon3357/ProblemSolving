@@ -1,0 +1,7 @@
+# 5m
+import sys
+
+string = sys.stdin.readline().rstrip()
+sArr = [string[i:] for i in range(len(string))]
+for s in sorted(sArr):
+    print(s)
