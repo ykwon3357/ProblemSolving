@@ -1,0 +1,41 @@
+# 80m
+
+# 부호와 합 일치하는 지 확인
+def check(idx):
+    hap = 0
+    for i in range(idx, -1, -1):
+        hap += res[i]
+        if hap == 0 and s[i][idx] != 0: # 합이 0인데 s[i][idx](arr i~idx 합의 부호)가 0아닐때
+            return False
+        if hap < 0 and s[i][idx] >= 0: # 합이 음순데 부호는 +
+            return False
+        if hap > 0 and s[i][idx] <= 0: # 합이 양순데 부호는 -
+            return False
+    return True # 위 검증 다 통과하면 true
+    
+def solve(idx):
+    if idx == n:
+        return True
+    if s[idx][idx] == 0: # idx ~ idx 합이 0 이면 res[idx]는 0
+        res[idx] = 0
+        return solve(idx+1)
+    for i in range(1, 11):
+        res[idx] = s[idx][idx]*i # 부호 x 1~10
+        if check(idx) and solve(idx+1): # 부호맞으면 다음 인덱스 찾기
+            return True
+    return False
+
+
+n = int(input())
+arr = list(input())
+s = [[0]*n for _ in range(n)]
+for i in range(n):
+    for j in range(i, n):
+        temp = arr.pop(0)
+        if temp == '+':
+            s[i][j] = 1
+        if temp == '-':
+            s[i][j] = -1
+res = [0]*n
+solve(0)
+print(*res)

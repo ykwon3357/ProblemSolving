@@ -1,0 +1,36 @@
+'''
+60m
+입력으로 주어진 방문순서대로 인접리스트 정렬 후 bfs 수행 하고 비교
+'''
+from collections import deque
+import sys
+
+n = int(sys.stdin.readline().rstrip())
+graph = [[] for _ in range(n+1)]
+for _ in range(n-1):
+    a, b = map(int, sys.stdin.readline().rstrip().split())
+    graph[a].append(b)
+    graph[b].append(a)
+userOrder = list(map(int, sys.stdin.readline().rstrip().split()))
+order = [-1 for i in range(n+1)] # 방문순서 저장할 배열
+
+for i in range(1, n+1): # 방문순서가 1 3 2 4 이면 order[1]=1, order[3]=2, ...
+    order[userOrder[i-1]] = i
+
+for i in range(1, n+1): # order배열 순서에 따라 인접리스트 정렬
+    graph[i] = sorted(graph[i], key = lambda x : order[x])
+
+visited = [0]*(n+1)
+q = deque()
+q.append(1)
+bfsOrder = []
+while q:
+    v = q.popleft()
+    bfsOrder.append(v)
+    visited[v] = 1
+
+    for i in graph[v]:
+        if not visited[i]:
+            q.append(i)
+
+print(1 if bfsOrder == userOrder else 0)

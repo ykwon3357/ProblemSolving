@@ -1,0 +1,21 @@
+# 30m
+
+n = int(input())
+a = list(map(int, input().split()))
+stack = []
+ngf = [-1]*n # 오등큰수 배열 -1로 초기화
+
+d = {}
+for i in range(n): # a수열 각 원소 개수 카운트
+    if a[i] in d:
+        d[a[i]] += 1
+    else:
+        d[a[i]] = 1
+
+for i in range(n):
+    while stack and stack[-1][0] < d[a[i]]: # 스택 top보다 더 많이있는 원소면
+        num, idx = stack.pop()
+        ngf[idx] = a[i] # ngf배열의 인덱스에 원소 넣어줌
+    stack.append((d[a[i]], i)) # 스택에 해당원소개수와 인덱스 넣어줌
+    
+print(*ngf)
