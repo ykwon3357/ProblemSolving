@@ -1,0 +1,65 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	 
+	public static void main(String[] args) {
+ 
+		Scanner sc = new Scanner(System.in);
+		int[] water = new int[3];
+ 
+		for (int i = 0; i < 3; i++) {
+			water[i] = sc.nextInt();
+		}
+		
+		int[] from = {0,0,1,1,2,2}; // 물 쏟는 쪽 (A->B = 0->1)
+		int[] to = {1,2,0,2,0,1}; // 물 받는 쪽
+		boolean[][] check = new boolean[201][201];
+		boolean[] ans = new boolean[201];
+		
+		Queue<Pair> q = new LinkedList<>();
+		
+		q.add(new Pair(0,0));
+		check[0][0] = true;
+		ans[water[2]] = true;
+		
+		while(!q.isEmpty()) {
+			Pair p = q.poll();
+			int x = p.x;
+			int y = p.y;
+			int z = water[2]-x-y;
+			
+			for(int i=0; i<6; i++) {
+				int[] next = {x,y,z};
+				next[to[i]] += next[from[i]];
+				next[from[i]] = 0;
+				
+				if(next[to[i]] > water[to[i]]) { // 물 받는 쪽 믈통 용량 초과했으면
+					next[from[i]] = next[to[i]] - water[to[i]]; // 물 쏟는 쪽 물통에 초과하는만큼 다시 넣어줌
+					next[to[i]] = water[to[i]]; // 물 받는 쪽 용량 꽉 채워줌
+				}
+				
+				if(!check[next[0]][next[1]]) { // 1,2번쨰 물통 용량의 쌍 처음 방문이면
+					check[next[0]][next[1]] = true;
+					q.add(new Pair(next[0], next[1]));
+					if(next[0]==0) { // 첫번째 물통 비어있을때
+						ans[next[2]] = true; // 세번째 물통 용량 true로 저장
+					}
+				}
+			}
+		}
+	    for(int i=0; i<=water[2]; i++) {
+	        if(ans[i])
+	            System.out.print(i+ " ");
+	    }
+	}
+}
+class Pair{
+	int x;
+	int y;
+	public Pair(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+}
