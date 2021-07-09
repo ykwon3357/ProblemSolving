@@ -1,0 +1,30 @@
+'''
+# 120m
+190 191 192 193 194 195 196 197 198 199 200
+1   0   0   1   0   1   1   0   2   1   0
+Âü°í: https://wootool.tistory.com/28 
+'''
+n, k = map(int, input().split())
+num_cnt, num_len, num_tot = 9, 1, 0
+tenten = 1
+cal_k = k
+while cal_k > num_cnt*num_len:
+    cal_k -= num_cnt*num_len
+    num_tot += num_cnt
+    num_cnt *= 10
+    num_len += 1
+
+num_tot += (cal_k-1) // num_len + 1
+
+
+if num_tot > n:
+    print(-1)
+else:
+    temp = (cal_k-1) % num_len + 1
+    for i in range(num_len-1):
+        tenten *= 10
+    for i in range(temp):
+        ans = num_tot // tenten
+        num_tot %= tenten
+        tenten //= 10
+    print(ans)
