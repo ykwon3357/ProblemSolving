@@ -1,4 +1,4 @@
-//1
+// 1.
 import java.util.*;
 
 class Solution {
@@ -26,7 +26,7 @@ class Solution {
     }
 }
 
-//2
+// 2.
 import java.util.*;
 
 public class Main2 {
@@ -38,6 +38,8 @@ public class Main2 {
 		String s4 = "llttaattll";
 		String s5 = "zzzzzz";
 		String s6 = "abcdef";
+		String s7 = "a";
+		String s8 = "aa";
 		for(String a:solution(s1)) {
 			System.out.print(a+" ");
 		}
@@ -61,31 +63,44 @@ public class Main2 {
 		for(String a:solution(s6)) {
 			System.out.print(a+" ");
 		}
+		System.out.println();
+		for(String a:solution(s7)) {
+			System.out.print(a+" ");
+		}
+		System.out.println();
+		for(String a:solution(s8)) {
+			System.out.print(a+" ");
+		}
 	}
 	public static String[] solution(String s) {
 		ArrayList<String> arr = new ArrayList<String>();
 		int start = 0, end = s.length()-1;
 		String[] answer = {};
 		String mid = "";
-		start = 0;
-		end = s.length()-1;
-		if(s.length()==1) {
+		
+		if(s.length()==1) { // 1. 1글자면 해당 글자 리턴 후 바로 종료
 			answer = new String[1];
 			answer[0] = s;
 			return answer;
 		}
+		
+		// 2. 문자열 중간까지 반복
 		for(int i=0; i<s.length()/2; i++) {
+			// 2-1. [start ~ i] 구간이 [뒤에서 i번째 ~ end] 구간과 같다면
 			if(s.substring(start,i+1).equals(s.substring(s.length()-1-i,end+1))) {
+				// arr에 해당 구간 문자열 추가, start, end 위치 갱신
 				arr.add(s.substring(start,i+1));
 				start = i+1;
 				end = s.length()-1-start;
 			}
+			// 2-2. 중간직전까지 탐색했을때 같은 구간 없으면 [start ~ end] 구간 mid에 추가
 			else if(i==s.length()/2-1) {
 				mid = s.substring(start,end+1);
 			}
 			
 		}
-		if(mid.equals("")) { // 중간값 없으면
+		// 3. 중간값 여부에 따라 answer배열 만들기 
+		if(mid.equals("")) {
 			answer = new String[arr.size()*2];
 			for(int i=0; i<answer.length; i++) {
 				if(i>=arr.size()) {
@@ -113,7 +128,7 @@ public class Main2 {
 
 }
 
-3.
+// 3.
 import java.util.*;
 
 public class Main2 {
