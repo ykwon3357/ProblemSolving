@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class Main {
+	
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		int k = sc.nextInt();
+		
+		/*
+		 * 1~9     1*9
+		 * 10~99   2*90
+		 * 100~999 3*900
+		 *        cntLength*cntNum
+		 */
+		
+		long finalNum = 0;
+		long cntLength = 1;
+		long cntNum = 9;
+		long temp = k;
+		
+		while(temp > cntLength*cntNum) {
+			temp -= cntLength*cntNum;
+			finalNum += cntNum;
+			cntLength++;
+			cntNum *= 10;
+		}
+		
+		finalNum = (finalNum + 1) + (temp - 1)/cntLength;
+		if(finalNum > n) {
+			System.out.println(-1);
+		}else {
+			System.out.println(String.valueOf(finalNum).charAt((int)((temp-1)%cntLength)));
+		}
+		
+	}
+
+}
