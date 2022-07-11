@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+public class Main {
+	
+	static StringBuilder sb;
+	
+	public static void main(String[] args) {
+		sb = new StringBuilder();
+		Scanner sc = new Scanner(System.in);
+		
+		int N = sc.nextInt();
+		
+		hanoi(N, 1, 2, 3);
+		System.out.println(sb.length()/4);
+		System.out.println(sb.toString());
+		
+	}
+	
+	static void hanoi(int n, int start, int temp, int dest) {
+		if(n==0) return;
+		hanoi(n-1, start, dest, temp);
+		sb.append(start+" ").append(dest+"\n");
+		hanoi(n-1, temp, start, dest);
+	}
+	
+}

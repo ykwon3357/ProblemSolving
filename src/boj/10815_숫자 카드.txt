@@ -1,0 +1,28 @@
+n = int(input())
+sg_card = sorted(list(map(int, input().split())))
+m = int(input())
+card = list(map(int, input().split()))
+
+def binary_search(num):
+    left, right = 0, len(sg_card)-1
+
+    while left<=right:
+        m = (left + right)//2
+        
+        if sg_card[m] == num:
+            return True
+        elif sg_card[m] < num:
+            left = m+1
+        else:
+            right = m-1
+
+    return False
+
+ans = []
+for c in card:
+    if binary_search(c):
+        ans.append(1)
+    else:
+        ans.append(0)
+
+print(*ans)

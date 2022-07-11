@@ -1,0 +1,20 @@
+n, m = map(int, input().split())
+matrix_a = [list(map(int, list(input()))) for _ in range(n)]
+matrix_b = [list(map(int, list(input()))) for _ in range(n)]
+
+if n < 3 or m < 3: # 3*3 부분행렬이 없을 경우
+    print(0 if matrix_a == matrix_b else -1)
+else:
+    def change(x, y):
+        for i in range(3):
+            for j in range(3):
+                matrix_a[x+i][y+j] = 1 - matrix_a[x+i][y+j]
+
+    cnt = 0
+    for i in range(n-2):
+        for j in range(m-2):
+            if matrix_a[i][j] != matrix_b[i][j]:
+                change(i,j)
+                cnt += 1
+
+    print(cnt if matrix_a == matrix_b else -1)

@@ -1,0 +1,55 @@
+from collections import deque
+
+r, c = map(int, input().split())
+matrix = [list(input()) for _ in range(r)]
+queue = deque()
+visited = [[0]*c for _ in range(r)]
+water = deque()
+for x in range(len(matrix)):
+    for y in range(len(matrix[0])):
+        if matrix[x][y] == '*':
+            water.append((x,y))
+        elif matrix[x][y] == 'S':
+            queue.append((x,y))
+            matrix[x][y] = 0
+            visited[x][y] = 1
+        elif matrix[x][y] == 'D':
+            d = (x,y)
+
+dx = [0,0,-1,1]
+dy = [-1,1,0,0]
+flag = False
+while queue or water:
+    wtemp = []
+    qtemp = []
+
+    while queue:
+        x, y = queue.popleft()
+        if matrix[x][y] != '*':
+            for i in range(4):
+                nx = x + dx[i]
+                ny = y + dy[i]
+
+                if 0 <= nx < r and 0 <= ny < c and not visited[nx][ny] and matrix[nx][ny] != 'X' and matrix[nx][ny] != '*':
+                    matrix[nx][ny] = matrix[x][y] + 1
+                    visited[nx][ny] = 1
+                    qtemp.append((nx,ny))
+
+    while water:
+        x, y = water.popleft()
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if nx == d[0] and ny == d[1]:
+                continue
+            if 0 <= nx < r and 0 <= ny < c and matrix[nx][ny] != 'X' and matrix[nx][ny] != '*':
+                matrix[nx][ny] = '*'
+                wtemp.append((nx,ny))
+
+    
+    for i in wtemp:
+        water.append(i)
+    for i in qtemp:
+        queue.append(i)
+
+print(matrix[d[0]][d[1]] if matrix[d[0]][d[1]] != 'D' else 'KAKTUS')

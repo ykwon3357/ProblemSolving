@@ -1,0 +1,35 @@
+# 40m
+# 백트래킹으로 순열구함
+# i로 시작시 i로 끝나야함
+# 순열대로 순회
+# 그중에 최솟값
+# 파이썬으로 제출 시 시간초과 뜸 => 더 효율적인 방법 고민해보기
+
+n = int(input())
+w = [list(map(int, input().split())) for _ in range(n)]
+#print(w)
+
+visited = [0] * n
+arr = [0] * n
+minCost = 10000001 
+def backtracking(k):
+    global minCost
+    if k == n:
+        nArr=[*arr, arr[0]] # 0 1 2 3 0  0번째마을에서 0번째마을로
+        sumCost = 0
+        for i in range(len(nArr)-1):
+            if w[nArr[i]][nArr[i+1]] == 0: # 갈 수 없는 경우 다른 경로 탐색을 위해 return
+                return
+            sumCost += w[nArr[i]][nArr[i+1]]
+        minCost = min(minCost, sumCost)   
+        return
+
+    for i in range(n):      
+        if not visited[i]:
+            arr[k] = i
+            visited[i] = 1
+            backtracking(k+1)
+            visited[i] = 0
+
+backtracking(0)
+print(minCost)

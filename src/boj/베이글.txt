@@ -1,0 +1,115 @@
+1.
+
+'''
+O(n*m)
+n명의 참가자가 각자 m높이 사다리를 탐
++-1 이내로 1이 있으면 +-1, 없으면 그대로
+'''
+
+def solution(n, ladder):
+    answer = []
+    
+    for i in range(n):
+        now = i
+        for j in range(len(ladder)): #[1,0,1]
+            # 첫째칸이고 오른쪽 사다리있을때 오른쪽으로 1칸 이동
+            if now == 0 and ladder[j][now] == 1: 
+                now += 1
+            # 마지막칸이고 왼쪽 사다리있을때 왼쪽으로 1칸 이동
+            elif now == n-1 and ladder[j][now-1] == 1:
+                now -= 1
+            # 둘째칸이상이고 왼쪽 사다리있을때 왼쪽으로 1칸 이동
+            elif now > 0 and ladder[j][now-1] == 1:
+                now -=1
+            # 마지막칸 이전이고 오른쪽 사다리있을때 오른쪽으로 1칸 이동
+            elif now < n-1 and ladder[j][now] == 1:
+                now += 1
+        answer.append(now+1)
+    return answer
+
+print(solution(4,[[1,0,1],[0,1,0],[0,0,1],[0,0,0],[1,0,0]])) # 4231
+print(solution(5,[[1,0,1,0],[0,1,0,0],[0,0,1,0],[0,0,0,1],[1,0,0,1]])) # 42315
+print(solution(5,[[1,0,1,0],[0,1,0,1],[0,0,1,0],[0,0,0,1],[0,1,0,0]])) # 51432
+
+
+2.
+'''
+dfs 로 각 디렉토리 경로 탐색 하면서 이름길이 합 구해줌
+'''
+def dfs(v, visited, graph, path, dirname, answer):
+    visited[v] = 1
+    #print(v, end=' ')
+    path.append(v)
+    for i in graph[v]:
+        if not visited[i]:
+            dfs(i, visited, graph, path, dirname, answer)
+    
+    sum_dirname = 0
+    for i in path:
+        sum_dirname += dirname[i-1] # 경로상 디렉토리 이름길이 합
+    sum_dirname += len(path)-1 # '/' 개수 합
+    answer.append(sum_dirname)
+    path.pop()
+
+def solution(N, relation, dirname):
+    dirname = list(map(lambda x:len(x),dirname)) # 디렉토리 이름길이
+    answer = []
+    graph = [[] for _ in range(N+1)]
+    for a, b in relation:
+        graph[a].append(b)
+        graph[b].append(a)
+    visited = [0]*(N+1)
+    dfs(1, visited, graph, [], dirname, answer)
+    return max(answer)
+
+print(solution(7, [[1,2],[2,5],[2,6],[1,3],[1,4],[3,7]], ['root','abcd','cs','hello','etc','hello','solution'])) # 16
+print(solution(7, [[1,2],[2,3],[3,4],[4,5],[1,6],[6,7]], ['root','a','b','c','d','efghij','k'])) # 13
+
+3. 
+#1
+from collections import Counter
+
+def solution(n, colors):
+    counter=Counter(colors)
+    data= list(dict(counter).values())
+    answer = 0
+    for i in data:
+        answer += i**2
+    return answer
+
+print(solution(10, [1,1,2,2,2,3,3,3,2,2]))
+print(solution(10, [1,1,2,2,4,3,4,3,2,2])) #26
+print(solution(10, [2,2,3,3,2,2,3,3,2,2])) #44
+
+#2
+from itertools import permutations
+import copy
+
+def solution(n, colors):
+    data= set(colors)
+    result = list(permutations(data,len(data)))
+    answer=[]
+    for i in result: #(1,2,3)
+        newcolors=copy.deepcopy(colors)
+        ary=[]
+        for j in i: # 1
+            num=1
+            idx=-1
+            cnt=0
+            while j in newcolors:
+                if cnt != 0:
+                    if idx == newcolors.index(j):
+                        num += 1
+                    else:                      
+                        ary.append(num)
+                        num = 1               
+                idx=newcolors.index(j)
+                newcolors.remove(j)
+                cnt += 1
+            ary.append(num)
+        sum = 0
+        for j in ary:
+            sum += j**2
+        answer.append(sum)
+
+    return max(answer)

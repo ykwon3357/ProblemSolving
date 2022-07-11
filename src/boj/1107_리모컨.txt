@@ -1,0 +1,20 @@
+# 100m
+n = int(input())
+m = int(input())
+brokenBtn = ''
+if m: # 고장난 버튼 있을때만 입력받음
+    brokenBtn = input().split()
+curChn = 100
+
+cnt = abs(curChn - n) # +-버튼 사용 할 경우
+
+for chn in range(1000001):
+    for i in range(len(str(chn))): # 채널의 자릿수
+        if str(chn)[i] in brokenBtn: # 사용할 수 없는 버튼이면 패스
+            break
+        
+        # 마지막자릿수까지 사용가능하면
+        elif i == (len(str(chn)) - 1):
+        # 채널번호 누른횟수(len(str(chn))) + 채널번호에서 희망채널까지 +-누르는 횟수(abs(chn-n))
+            cnt = min(cnt, len(str(chn))+ abs(chn-n))
+print(cnt)

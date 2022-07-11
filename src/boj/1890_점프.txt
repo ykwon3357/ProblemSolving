@@ -1,0 +1,20 @@
+# 60m
+
+n = int(input())
+matrix = [list(map(int, input().split())) for _ in range(n)]
+dp = [[0]*n for _ in range(n)] # 해당 좌표로 이동할 수 있는 경우의 수
+dp[0][0] = 1 # 시작점 1로 초기화
+
+for x in range(n):
+    for y in range(n):
+        if matrix[x][y] == 0:
+            break
+
+        nx = x + matrix[x][y] # 아래로
+        ny = y + matrix[x][y] # 오른쪽으로
+        if 0 <= nx < n:
+            dp[nx][y] += dp[x][y] 
+        if 0 <= ny < n:
+            dp[x][ny] += dp[x][y]
+
+print(dp[n-1][n-1])

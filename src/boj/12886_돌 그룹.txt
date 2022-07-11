@@ -1,0 +1,44 @@
+'''
+a + b + c = d
+c = d - a - b
+3으로 나누어 떨어지면 bfs
+x y z 중복 제거를 위해 x y 두 값만 사용
+'''
+from collections import deque
+
+a, b, c = map(int, input().split())
+d = a + b + c 
+if d%3 == 0:
+    def bfs(a,b,d):
+        q = deque()
+        q.append((a,b))
+        visited = [[0]*d for _ in range(d)]
+        visited[a][b] = 1
+        while q:
+            x, y = q.popleft()
+            z = d - x - y
+
+            if x == y and y == z:
+                print(1)
+                return
+
+            for a, b in (x, y), (y, z), (z, x):
+                if a > b:
+                    a -= b
+                    b += b
+                elif b > a:
+                    b -= a
+                    a += a
+                else:
+                    continue
+                c = d - a - b
+
+                nx = min(a,b,c)
+                ny = max(a,b,c)
+                if not visited[nx][ny]:
+                    visited[nx][ny] = 1
+                    q.append((nx,ny))
+        print(0)
+    bfs(a,b,d)     
+else:
+    print(0)

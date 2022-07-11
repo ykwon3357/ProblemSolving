@@ -1,0 +1,29 @@
+#90m
+from collections import deque
+INF = int(1e9)
+
+s = int(input())
+
+m = [[INF]*(s+1) for _ in range(s+1)]
+queue = deque() 
+queue.append((1,0)) # 화면 이모티콘, 클립보드 이모티콘 개수
+m[1][0] = 0
+
+while queue:
+    screen, clipboard = queue.popleft()
+    # 1. 화면에서 클립보드로 복사
+    if m[screen][screen] == INF: 
+        m[screen][screen] = m[screen][clipboard] + 1
+        queue.append((screen, screen))
+
+    # 2. 클립보드에서 화면으로 복사
+    if screen + clipboard <= s and m[screen + clipboard][clipboard] == INF:
+        m[screen + clipboard][clipboard] = m[screen][clipboard] + 1
+        queue.append((screen + clipboard, clipboard))
+
+    # 3. 화면에서 1개 삭제
+    if screen - 1 >= 0 and m[screen - 1][clipboard] == INF:
+        m[screen - 1][clipboard] = m[screen][clipboard] + 1
+        queue.append((screen - 1, clipboard))
+
+print(min(m[s]))

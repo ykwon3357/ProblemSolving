@@ -1,0 +1,12 @@
+#40
+n = int(input())
+nArr = list(map(int, input().split()))
+
+d = [i for i in nArr]
+
+for i in range(n):
+    for j in range(i):
+        if nArr[j] < nArr[i]:
+            d[i] = max(d[i], d[j] + nArr[i])
+
+print(max(d))

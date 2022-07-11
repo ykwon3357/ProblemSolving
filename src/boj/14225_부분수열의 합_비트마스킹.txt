@@ -1,0 +1,16 @@
+n = int(input())
+s = list(map(int, input().split()))
+
+visited = [0]*2000000
+
+for i in range(1<<n): # 000 ~ 111 모든 경우의 수
+    sum_value = 0
+    for j in range(n):
+        if i & (1<<j): # 1이 있는 곳만 더해줌
+            sum_value += s[j]
+    visited[sum_value] = 1
+
+for i in range(2000000):
+    if not visited[i]:
+        print(i)
+        break

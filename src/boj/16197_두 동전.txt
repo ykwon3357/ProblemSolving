@@ -1,0 +1,67 @@
+# 60m
+from collections import deque
+
+n, m = map(int, input().split())
+board = [list(input()) for _ in range(n)]
+
+flag = True
+for i in range(n):
+    for j in range(m):
+        if board[i][j] == 'o':
+            if flag:
+                ai, aj = i, j # 첫째구슬 위치
+                flag = False
+            else:
+                bi, bj = i, j # 둘째구슬 위치
+
+q = deque()
+q.append((ai, aj, bi, bj, 1)) # 각 구슬 위치와 이동횟수
+visited = [[[[0]*m for _ in range(n)] for _ in range(m)] for _ in range(n)]
+visited[ai][aj][bi][bj] = 1
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
+
+def bfs():
+    while q:
+        ax, ay, bx, by, depth = q.popleft()
+
+        if depth > 10:
+            break
+        
+        for i in range(4):
+            nax = ax + dx[i]
+            nay = ay + dy[i]
+            nbx = bx + dx[i]
+            nby = by + dy[i]
+
+            # a,b 둘다 떨어졌을 때
+            if (nax < 0 or nax >= n or nay < 0 or nay >= m) and (nbx < 0 or nbx >= n or nby < 0 or nby >= m):
+                continue
+
+            # a가 떨어지고 b가 남았을때 (성공)
+            elif (nax < 0 or nax >= n or nay < 0 or nay >= m) and not (nbx < 0 or nbx >= n or nby < 0 or nby >= m):
+                print(depth)
+                return
+
+            # b가 떨어지고 a가 남았을때 (성공)
+            elif not (nax < 0 or nax >= n or nay < 0 or nay >= m) and (nbx < 0 or nbx >= n or nby < 0 or nby >= m):
+                print(depth)
+                return
+
+            # a,b 둘다 남았을 때
+            elif not (nax < 0 or nax >= n or nay < 0 or nay >= m) and not (nbx < 0 or nbx >= n or nby < 0 or nby >= m):
+                # 둘 다 벽이 아닌 경우
+                if board[nax][nay] != '#' and board[nbx][nby] != '#' and not visited[nax][nay][nbx][nby]:
+                    visited[nax][nay][nbx][nby] = 1
+                    q.append((nax, nay, nbx, nby, depth + 1))
+                # a가 벽, b가 벽 아닌 경우
+                elif board[nax][nay] == '#' and board[nbx][nby] != '#' and not visited[ax][ay][nbx][nby]:
+                    visited[ax][ay][nbx][nby] = 1
+                    q.append((ax, ay, nbx, nby, depth + 1))
+                # b가 벽, a가 벽 아닌 경우
+                elif board[nax][nay] != '#' and board[nbx][nby] == '#' and not visited[nax][nay][bx][by]:
+                    visited[nax][nay][bx][by] = 1
+                    q.append((nax, nay, bx, by, depth + 1))
+    print(-1)
+
+bfs()

@@ -1,0 +1,65 @@
+'''
+120m
+섬마다 라벨링 후 각 섬에서 한칸씩 넓혀나감
+만났을때 겹쳤는지 아닌지에 따라 경우 나눠서 거리 계산
+'''
+from collections import deque
+
+n = int(input())
+land = []
+for _ in range(n):
+    land.append(list(map(int, input().split())))
+
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
+ocean = deque() # 바다와 맞닿는 섬의 좌표들 저장
+
+def bfs(x,y,cnt):
+    q = deque()
+    q.append((x,y))
+    while q:
+        x, y = q.popleft()
+        land[x][y] = cnt
+
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+
+            if nx < 0 or nx >= n or ny < 0 or ny >= n:
+                continue
+            if land[nx][ny] == 1:
+                land[nx][ny] = cnt
+                q.append((nx,ny))
+            elif not land[nx][ny] and (x, y) not in ocean: # 바다와 맞닿는 섬의 좌표 저장
+                ocean.append((x, y))
+
+# 섬 라벨링
+cnt = -1
+for i in range(n):
+    for j in range(n):
+        if land[i][j] == 1:
+            bfs(i,j,cnt)
+            cnt -= 1
+
+# 각 섬에서 한칸씩 넓혀나감
+loop = 0
+ans = int(1e9)
+while ocean:
+    loop += 1
+    for _ in range(len(ocean)):
+        x, y = ocean.popleft()
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+
+            if nx < 0 or nx >= n or ny < 0 or ny >= n:
+                continue
+            if not land[nx][ny]: # 바다일때 섬 한칸씩 확장
+                land[nx][ny] = land[x][y]
+                ocean.append((nx, ny))
+            elif land[nx][ny] < land[x][y]: # -1섬에서 넓히려는데 -2섬이 이미 있을때 즉, 이미 이전 루프때 만났던거라서 이전 루프*2
+                ans = min(ans, (loop-1)*2)
+            elif land[nx][ny] > land[x][y]: # -2 섬에서 넓히려는데 -1섬있으면 이번 루프때 만나게된거 즉, 한칸 겹치므로 1빼준다
+                ans = min(ans, loop*2-1)
+
+print(ans)

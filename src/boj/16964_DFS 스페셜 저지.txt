@@ -1,0 +1,32 @@
+# 20m
+import sys
+
+n = int(sys.stdin.readline().rstrip())
+graph = [[] for _ in range(n+1)]
+for _ in range(n-1):
+    a, b = map(int, sys.stdin.readline().rstrip().split())
+    graph[a].append(b)
+    graph[b].append(a)
+visitOrder = list(map(int, sys.stdin.readline().rstrip().split()))
+
+order = [-1]*(n+1)
+for i in range(n): # 입력받은 방문순서대로 각 정점 순서 지정
+    order[visitOrder[i]] = i
+
+# 입력받은 순서대로 그래프 각 정점배열 정렬
+for i in range(1, n+1):
+    graph[i].sort(key = lambda x : order[x])
+
+visited = [0]*(n+1)
+res = []
+def dfs(v):
+    if visited[v]:
+        return
+    visited[v] = 1
+    res.append(v)
+
+    for i in graph[v]:
+        if not visited[i]:
+            dfs(i)
+dfs(1)
+print(1 if res == visitOrder else 0)

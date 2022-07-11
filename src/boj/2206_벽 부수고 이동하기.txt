@@ -1,0 +1,36 @@
+# 60m
+# visited[x][y][z] z가 1이면 벽을 뚫고 온 경로
+from collections import deque
+
+n, m = map(int, input().split())
+
+matrix = [list(map(int, list(input()))) for _ in range(n)]
+visited = [[[0]*2 for _ in range(m)] for _ in range(n)]
+visited[0][0][0] = 1
+queue = deque()
+queue.append((0,0,0))
+dx = [0,0,-1,1]
+dy = [-1,1,0,0]
+
+flag = True
+while queue:
+    x, y, z = queue.popleft()
+
+    if x == n-1 and y == m-1:
+        print(visited[x][y][z])
+        flag = False
+        break
+
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
+
+        if 0 <= nx < n and 0 <= ny < m:
+            if matrix[nx][ny] and not visited[nx][ny][z] and not z: # 벽이고 처음 뚫는 경우
+                visited[nx][ny][1] = visited[x][y][z] + 1
+                queue.append((nx, ny, 1))
+            elif not matrix[nx][ny] and not visited[nx][ny][z]: # 벽이 없고 처음 방문하는 경우
+                visited[nx][ny][z] = visited[x][y][z] + 1
+                queue.append((nx, ny, z))
+if flag:
+    print(-1)

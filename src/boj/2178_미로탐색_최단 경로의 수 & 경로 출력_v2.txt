@@ -1,0 +1,97 @@
+'''
+4 6
+101111
+101010
+101011
+111011
+4 6
+110110
+110110
+111111
+111101
+4 6
+101111
+101011
+101011
+111011
+최단 경로의 수 찾기 & 경로 출력
+'''
+n, m = map(int, input().split())
+maze = [list(map(int, list(input()))) for _ in range(n)]
+
+visited = [[0]*m for _ in range(n)]
+dx = [0,0,-1,1]
+dy = [-1,1,0,0]
+cnt = 0
+exe_cnt = 0
+
+def dfs(x,y):
+    global cnt, exe_cnt
+    exe_cnt += 1
+
+    if x == 0 and y == 0:
+        cnt += 1
+        # 최단 경로 출력
+        for v in visited:
+            print(*v)
+        print()
+        return
+
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
+        if nx < 0 or nx >= n or ny < 0 or ny >= m:
+            continue
+        if maze[nx][ny] == maze[x][y] - 1: # 다음 칸 가중치가 1 적은 경로로 진행
+            visited[nx][ny] = 1
+            dfs(nx, ny)
+            visited[nx][ny] = 0   
+    return
+
+def origin_dfs(x,y,depth):
+    global cnt, exe_cnt
+    exe_cnt += 1
+
+    if x == n-1 and y == m-1 and depth == minDist:
+        cnt += 1
+        # 최단 경로 출력
+        for v in visited:
+            print(*v)
+        print()
+        return
+
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
+        # 미로 벗어나거나 0일때는 스킵
+        if nx < 0 or nx >= n or ny < 0 or ny >= m or maze[nx][ny] == 0 or visited[nx][ny]:
+            continue
+        visited[nx][ny] = 1
+        origin_dfs(nx, ny, depth+1)
+        visited[nx][ny] = 0   
+    return
+
+def bfs(x, y):
+    q = [(x, y)]
+
+    while q:
+        x, y = q.pop(0)
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            # 미로 벗어나거나 0일때는 스킵
+            if nx < 0 or nx >= n or ny < 0 or ny >= m or maze[nx][ny] == 0:
+                continue
+            if maze[nx][ny] == 1: # 첫 방문일시 최단거리 갱신
+                maze[nx][ny] = maze[x][y] + 1
+                q.append((nx, ny))
+    return maze[n-1][m-1]
+
+minDist = bfs(0,0)
+maze[0][0] = 1 # 첫째칸 가중치 3을 1로 변경
+origin_dfs(0,0,1)
+print('기존 dfs 실행횟수:', exe_cnt)
+print('최단경로 개수:', cnt)
+exe_cnt = 0
+dfs(n-1,m-1)
+print('개선된 dfs 실행횟수:', exe_cnt)

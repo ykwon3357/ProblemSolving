@@ -1,0 +1,46 @@
+'''
+50m
+12 13 14 / 23 24 34
+34 24 23
+
+123 124 125 126 134  135 136 145 146 156
+456 356 346 345 256  246 245 236 235 234 
+
+nP(n//2) // 2
+1로 시작하는 순열까지만 탐색
+'''
+
+n = int(input())
+s = [list(map(int, input().split())) for _ in range(n)]
+
+visited = [0]*n
+arr = []
+minVal = int(1e9)
+
+def findMin(arr): # 스타트팀과 링크팀 능력치 차이구함 
+    start,link=0,0
+    arr2 = [i for i in range(n) if i not in arr] # 다른팀 생성 0256 1347
+    for i in range(len(arr)):
+        for j in range(len(arr)):
+            if i==j: continue
+            start += s[arr[i]][arr[j]]
+            link += s[arr2[i]][arr2[j]]
+    return abs(start-link)
+
+def backtracking(idx):
+    global minVal
+    if len(arr) == n//2:
+        minVal = min(minVal, findMin(arr))
+        return
+    
+    for i in range(idx, n):
+        if i in arr:
+            continue
+        arr.append(i)
+        backtracking(i)
+        arr.pop()
+        if not arr: # arr이 비면, 즉 맨 앞자리가 바뀔때 탐색 종료
+            return
+        
+backtracking(0)
+print(minVal)

@@ -1,0 +1,12 @@
+# 10m
+# 97~122
+import sys
+
+s = sys.stdin.readline().rstrip()
+
+d = {chr(i):0 for i in range(97, 123)}
+
+for word in s:
+    d[word] += 1
+
+print(*d.values())

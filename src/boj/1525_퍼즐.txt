@@ -1,0 +1,42 @@
+'''
+1 0 3
+4 2 5
+7 8 6
+'''
+from collections import deque
+
+puzzle = ''
+for _ in range(3):
+    puzzle += input().replace(' ','') # 퍼즐을 일렬로 만듦
+
+q = deque()
+q.append(puzzle)
+visited = dict() # 방문표시를 위해 딕셔너리 사용
+visited[puzzle] = 0 # key : 퍼즐 형태, value: 퍼즐 이동 수
+
+dx = [1,-1,0,0]
+dy = [0,0,1,-1]
+flag = False
+while q:
+    v = q.popleft()
+    if v == '123456780': # 정렬된 경우
+        print(visited[v]) # 이동횟수 출력 후 종료
+        flag = True
+        break
+    target = v.find('0') # 0의 인덱스로 x,y 좌표 구함
+    x = target // 3
+    y = target % 3
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
+        if 0 <= nx < 3 and 0 <= ny < 3:
+            idx = nx*3 + ny # 3x3표에서 좌표를 리스트로 바꿨을때 인덱스 값
+            tv = list(v) # 리스트로 바꿔서 위치 swap
+            tv[target], tv[idx] = tv[idx], tv[target]
+            ti = ''.join(tv) # 해당 퍼즐형태  visited에 없으면 추가하면서 이동횟수 1증가
+            if not visited.get(ti):
+                visited[ti] = visited[v] + 1
+                q.append(ti)
+if not flag: # 위에 안걸렸으면 불가능
+    print(-1)
+

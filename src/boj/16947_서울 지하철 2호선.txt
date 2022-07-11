@@ -1,0 +1,58 @@
+# 110m
+# dfs로 사이클 찾고 bfs로 그 사이클과 거리 최솟값
+from collections import deque
+import sys
+sys.setrecursionlimit(int(1e9))
+input = sys.stdin.readline
+
+n = int(input().rstrip())
+graph = [[] for _ in range(n+1)]
+for _ in range(n):
+    a, b = map(int, input().rstrip().split())
+    graph[a].append(b)
+    graph[b].append(a)
+
+'''
+check[i] = 0 : 방문하지 않은 노드
+check[i] = 1 : 방문한 노드
+check[i] = 2 : 사이클에 속하는 노드
+'''
+check = [0]*(n+1)
+dist = [0]*(n+1)
+
+def dfs(v, depth):
+    # 이미 방문한 노든데 거리차 3이상이면 사이클
+    if check[v]:
+        if depth - dist[v] >= 3:
+            return v
+        else:
+            return -1
+    
+    check[v] = 1
+    dist[v] = depth
+    for i in graph[v]:
+        cycleStartNode = dfs(i, depth + 1)
+        if cycleStartNode != -1:
+            check[v] = 2
+            if v == cycleStartNode:
+                return -1
+            else:
+                return cycleStartNode
+    return -1
+# 사이클 찾기
+dfs(1,0)
+# 사이클까지 거리 계산
+queue = deque()
+for i in range(1, n+1):
+    if check[i] == 2:
+        queue.append(i)
+        dist[i] = 0
+    else:
+        dist[i] = -1
+while queue:
+    v = queue.popleft()
+    for i in graph[v]:
+        if dist[i] == -1:
+            queue.append(i)
+            dist[i] = dist[v] + 1
+print(' '.join(map(str, dist[1:])))
