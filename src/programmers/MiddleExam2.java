@@ -1,16 +1,11 @@
 package programmers;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.text.ParseException;
 public class MiddleExam2 {
 
-	public static void main(String[] args) throws IOException, ParseException {
+	public static void main(String[] args) throws IOException {
 		String[][] booked = new String[][] {{"09:10", "lee"}};
 		String[][] unbooked = new String[][] {{"09:00", "kim"}, {"09:05", "bae"}};
 		String[][] booked2 = new String[][] {{"09:55", "hae"}, {"10:05", "jee"}};
@@ -47,46 +42,65 @@ public class MiddleExam2 {
 	}
     
 	public String[] solution(String[][] booked, String[][] unbooked) {
-        int bookedSize = booked.length;
-        int unbookedSize = unbooked.length;
-        String[] answer = new String[unbookedSize + bookedSize];
-        int answerIndex = 0;
-        int unbookedIndex = 0;
-        int bookedIndex = 0;
-        LocalTime currentTime = LocalTime.parse(booked[bookedIndex][0])
-            .compareTo(LocalTime.parse(unbooked[unbookedIndex][0])) < 0 ?
-            LocalTime.parse(booked[bookedIndex][0]) : LocalTime.parse(unbooked[unbookedIndex][0]);
+        String[] answer = {};
 
-        while (bookedIndex <= bookedSize && unbookedIndex <= unbookedSize) {
-            LocalTime afterTenMinutesFromCurrentTime = currentTime.plusMinutes(10);
-            LocalTime bookedTime = bookedIndex == bookedSize ? null : LocalTime.parse(booked[bookedIndex][0]);
-            LocalTime unbookedTime = unbookedIndex == unbookedSize ? null : LocalTime.parse(unbooked[unbookedIndex][0]);
-            if (bookedTime != null && bookedTime.compareTo(currentTime) <= 0 || unbookedIndex >= unbookedSize) {
-                answer[answerIndex] = booked[bookedIndex][1];
-                bookedIndex++;
-                currentTime = bookedTime.plusMinutes(10);
-            } else if (unbookedTime != null && unbookedTime.compareTo(currentTime) <= 0 || bookedIndex >= bookedSize) {
-                answer[answerIndex] = unbooked[unbookedIndex][1];
-                unbookedIndex++;
-                currentTime = unbookedTime.plusMinutes(10);
-            } else {
-                if (bookedTime != null && unbookedTime != null) {
-                    if (bookedTime.compareTo(unbookedTime) < 0) {
-                        answer[answerIndex] = booked[bookedIndex][1];
-                        bookedIndex++;
-                        currentTime = bookedTime.plusMinutes(10);
-                    } else {
-                        answer[answerIndex] = unbooked[unbookedIndex][1];
-                        unbookedIndex++;
-                        currentTime = unbookedTime.plusMinutes(10);
-                    }
+        ArrayList<String> answerList = new ArrayList<>();
+
+        // DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("mm:ss");
+
+        LocalTime now = LocalTime.of(0, 1);
+
+        int bIdx = 0;       //   예약 손님 배열 인덱스
+        int ubIdx = 0;      // 비예약 손님 배열 인덱스
+        while (bIdx < booked.length || ubIdx < unbooked.length) {
+            if ( bIdx < booked.length ) {
+                // 1. 예약 손님 도착 여부 확인
+                if (booked[bIdx][0].compareTo(now.toString()) <= 0) {
+                    // 1-1. 예약 손님이 현재 와있을 경우
+                    //      업무 처리
+                    answerList.add(booked[bIdx][1]);
+                    now = now.plusMinutes(10);
+                    // System.out.println(booked[bIdx][1] + " " + now);
+                    bIdx++;
+                    continue;
                 }
             }
-            answerIndex++;
-            if (bookedIndex >= bookedSize && unbookedIndex >= unbookedSize) {
-                break;
+ 
+            if ( ubIdx < unbooked.length ) {
+                // 1-1. 예약 손님이 아직 없을 경우
+                //      비예약손님 확인하여 진행
+                if (unbooked[ubIdx][0].compareTo(now.toString()) <= 0) {
+                    answerList.add(unbooked[ubIdx][1]);
+                    now = now.plusMinutes(10);
+                    // System.out.println(unbooked[ubIdx][1] + " " + now);
+                    ubIdx++;
+                    continue;                    
+                }
+            }
+
+            // 1-2. 비예약손님도 없을 경우
+            //      다음 예약 손님과 비예약 손님 중 더 빨리 오는 손님
+            //      시간으로 이동
+            if (bIdx < booked.length && ubIdx < unbooked.length) {
+                if (booked[bIdx][0].compareTo(unbooked[ubIdx][0]) <= 0) {
+                    // 예약 손님이 더 빨리 올 경우.
+                    now = now.parse(booked[bIdx][0]);
+                }
+
+                else {
+                    // 비예약 손님이 더 빨리 올 경우.
+                    now = now.parse(unbooked[ubIdx][0]);
+                }
+            }
+            else if (bIdx < booked.length) {
+                now = now.parse(booked[bIdx][0]);
+            }
+            else {
+                now = now.parse(unbooked[ubIdx][0]);
             }
         }
+
+        answer = answerList.toArray(new String[answerList.size()]);
         return answer;
     }
     
